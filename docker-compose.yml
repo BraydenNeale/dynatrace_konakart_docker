@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 services:
     konakart_app:
@@ -6,7 +6,7 @@ services:
         env_file:
             - ./app/konakart.env
         volumes_from:
-            - dtagent
+            - container:dtagent
         external_links:
             - dtcollector
         command: catalina.sh run
