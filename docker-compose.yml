@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+    konakart_app:
+        container_name: konakart_app
+        build: ./app
+        ports:
+            - 8080:8780
+        env_file:
+            - ./app/konakart.env
+
+    konakart_db:
+        container_name: konakart_db
+        image: beantoast/dtkonakart_mysql
+        ports:
+            - 3306:3306
+
+    konakart_proxy:
+        container_name: konakart_proxy
+        image: dockercloud/haproxy
+        ports:
+            - 80:80
+        links:
+            - konakart_app
