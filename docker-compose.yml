@@ -17,8 +17,10 @@ services:
 
     konakart_proxy:
         container_name: konakart_proxy
-        image: dockercloud/haproxy
+        image: dockercloud/haproxy:latest
         ports:
             - 80:80
         links:
             - konakart_app
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
