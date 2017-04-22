@@ -5,6 +5,11 @@ services:
         build: ./app
         env_file:
             - ./app/konakart.env
+        volumes_from:
+            - dtagent
+        external_links:
+            - dtcollector
+        command: catalina.sh run
 
     konakart_db:
         image: beantoast/dtkonakart_mysql
