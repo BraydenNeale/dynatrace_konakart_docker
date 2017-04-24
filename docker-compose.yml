@@ -9,7 +9,8 @@ services:
             - container:dtagent
         external_links:
             - dtcollector
-        command: catalina.sh run
+        #command:
+        #    - /usr/local/konakart/bin/catalina.sh run
 
     konakart_db:
         image: beantoast/dtkonakart_mysql
