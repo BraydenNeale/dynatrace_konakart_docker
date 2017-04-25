@@ -1,6 +1,6 @@
 if [ ! -f /usr/local/konakart ]; then
   	#Set default DB type
-	if [ -z "$DB_TYPE"]; then
+	if [ -z "$DB_TYPE" ]; then
 		DB_TYPE="mysql"
 		echo 'db type set to mysql'
 	fi

@@ -34,7 +34,7 @@ dtagent:
   hostname: "docker-dtagent"
   image: "dynatrace/agent:6.5-slim"
   environment: 
-    DT_AGENT_NAME: "tomcat_Konakart"
+    DT_AGENT_NAME: "dtagent"
   volumes:
     - /dynatrace
     - "/tmp/log/dynatrace/agents/dtagent:/dynatrace/log/agent"
