@@ -31,6 +31,7 @@ echo "Starting...."
 
 #Run the KonaKart application
 #The tail is needed in this case because Docker will stop if nothing is running the foreground
+mv /tmp/startkonakart.sh /usr/local/konakart/bin/startkonakart.sh
 /bin/sh /usr/local/konakart/bin/startkonakart.sh
 tail -f /usr/local/konakart/logs/catalina.out
 

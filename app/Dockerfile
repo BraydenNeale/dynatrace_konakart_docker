@@ -11,6 +11,7 @@ RUN apt-get install -y openjdk-7-jre
 CMD echo Adding installation script
 ADD ./installation.sh /opt/
 ADD ./konakart-installation /tmp/
+ADD ./startkonakart.sh /tmp/
 
 #Listen on default konakart port
 EXPOSE 8780
