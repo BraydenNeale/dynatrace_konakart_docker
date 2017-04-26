@@ -17,6 +17,15 @@ Configure system profile through client:<br>
     Note: agent name is currently hardcoded in startkonakart.sh so set the agent mapping to tomcat_Konakart (or update this).<br>
     TODO: Environment variable for this... or catalina.sh run<br> 
 
+Launch Konakart: app servers, db, load balancer<br>
+`cd ..`<br>
+`docker-compose up -d`
+
+Scale app server (load balancer auto adapts... but legacy have to manually specify containers).<br>
+`docker-compose stop konakart_app2` (or konakart_app3, konakart_app4)<br>
+`docker-compose up -d konakart_app2` (or konakart_app3, konakart_app4)
+
+##### TODO - Better launch/scale workflow through compose v2
 Launch Konakart: app server, db, load balancer<br>
 `cd ..`<br>
 `docker-compose up -d`
@@ -31,4 +40,6 @@ Scale app server (load balancer auto-adapts)<br>
 
 ### Known issues
 The mysql image used for this (beantoast... from lab document) has an issue where the DB and Konakart_App don't quite align (old version).<br>
-TODO: Setup a new DB through base mysql image
+TODO: Setup a new DB through base mysql image<br>
+
+The legacy load balancer setup is not ideal... can only scale up to 4 app servers and have to specify different containers for them. The branch compose2 LB solves this via compose mode... but cannot connect to that collector via my network config attemps.
