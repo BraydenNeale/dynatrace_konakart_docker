@@ -1,4 +1,4 @@
-konakart_app1:
+konakart_app:
     build: ./app
     env_file:
         - ./app/konakart.env
@@ -6,43 +6,8 @@ konakart_app1:
         - dtagent
     external_links:
         - dtcollector
-    ports:
-        - 8080:8780
     #command:
     #    - /usr/local/konakart/bin/catalina.sh run
-
-konakart_app2:
-    build: ./app
-    env_file:
-        - ./app/konakart.env
-    volumes_from:
-        - dtagent
-    external_links:
-        - dtcollector
-    ports:
-        - 8081:8780
-
-konakart_app3:
-    build: ./app
-    env_file:
-        - ./app/konakart.env
-    volumes_from:
-        - dtagent
-    external_links:
-        - dtcollector
-    ports:
-        - 8082:8780
-
-konakart_app4:
-    build: ./app
-    env_file:
-        - ./app/konakart.env
-    volumes_from:
-        - dtagent
-    external_links:
-        - dtcollector
-    ports:
-        - 8083:8780
 
 konakart_db:
     image: beantoast/dtkonakart_mysql
@@ -54,9 +19,6 @@ konakart_proxy:
     ports:
         - 80:80
     links:
-        - konakart_app1
-        - konakart_app2
-        - konakart_app3
-        - konakart_app4
+        - konakart_app
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock

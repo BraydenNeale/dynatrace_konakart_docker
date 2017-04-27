@@ -19,19 +19,11 @@ Configure system profile through client:<br>
 
 Launch Konakart: app servers, db, load balancer<br>
 `cd ..`<br>
-`docker-compose up -d`
-
-Scale app server (load balancer auto adapts... but legacy have to manually specify containers).<br>
-`docker-compose stop konakart_app2` (or konakart_app3, konakart_app4)<br>
-`docker-compose up -d konakart_app2` (or konakart_app3, konakart_app4)
-
-##### TODO - Better launch/scale workflow through compose v2
-Launch Konakart: app server, db, load balancer<br>
-`cd ..`<br>
+`docker-compose scale konakart_app=4` (only have 4 Tcp ports set - LB needs to know about all of them)<br>
 `docker-compose up -d`
 
 Scale app server (load balancer auto-adapts)<br>
-`docker-compose scale konakart_app=x`
+`docker-compose scale konakart_app=x` (where 1 <= x <= 4)
 
 ### System dependencies
 * docker
