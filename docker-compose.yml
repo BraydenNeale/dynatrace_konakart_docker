@@ -13,7 +13,9 @@ services:
             - db
 
     database:
-        image: beantoast/dtkonakart_mysql
+        image: mysql:latest
+        env_file:
+            - ./app/konakart.env
         ports:
             - 3306:3306
 
