@@ -10,12 +10,12 @@ services:
         env_file:
             - ./app/konakart.env
         depends_on:
-            - db
+            - database
 
     database:
         image: mysql:latest
         env_file:
-            - ./app/konakart.env
+            - ./app/mysql.env
         ports:
             - 3306:3306
 
@@ -24,6 +24,6 @@ services:
         ports:
             - 80:80
         links:
-            - konakart_app
+            - app
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
