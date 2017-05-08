@@ -1,24 +1,27 @@
-konakart_app:
-    build: ./app
-    env_file:
-        - ./app/konakart.env
-    volumes_from:
-        - dtagent
-    external_links:
-        - dtcollector
-    #command:
-    #    - /usr/local/konakart/bin/catalina.sh run
+version: '2'
 
-konakart_db:
-    image: beantoast/dtkonakart_mysql
-    ports:
-        - 3306:3306
+volumes:
+    db-data:
+        external: false
+            
+services:
+    app:
+        build: ./app
+        env_file:
+            - ./app/konakart.env
+        depends_on:
+            - db
 
-konakart_proxy:
-    image: dockercloud/haproxy:latest
-    ports:
-        - 80:80
-    links:
-        - konakart_app
-    volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
+    database:
+        image: beantoast/dtkonakart_mysql
+        ports:
+            - 3306:3306
+
+    proxy:
+        image: dockercloud/haproxy:latest
+        ports:
+            - 80:80
+        links:
+            - konakart_app
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
