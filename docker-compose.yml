@@ -1,12 +1,8 @@
 version: '2'
 
-volumes:
-    db-data:
-        external: false
-            
 services:
     app:
-        build: ./app
+        image: braydenneale/konakart:1.0.0
         env_file:
             - ./app/konakart.env
         depends_on:
