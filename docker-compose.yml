@@ -1,9 +1,5 @@
 version: '2'
 
-volumes:
-    db-data:
-        external: false
-            
 services:
     app:
         build: ./app
