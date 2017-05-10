@@ -1,0 +1,12 @@
+TUTORIALDIR=~/src/guestbook-tutorial-167119/gke_guestbook-2017-05-09-15-20
+git clone https://github.com/GoogleCloudPlatform/container-engine-samples.git $TUTORIALDIR
+cd $TUTORIALDIR/guestbook
+gcloud container clusters get-credentials cluster-1 --zone us-central1-b
+kubectl create -f redis-master-service.yaml
+kubectl create -f redis-master-controller.yaml
+kubectl get pods
+kubectl get rc
+kubectl get services
+
+# This file just creates another 2 - slave redis read replicas
+kubectl create -f all-in-one/redis-slave.yaml
