@@ -1,90 +1,91 @@
-apiVersion: apps/v1beta1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-    name: konakart_web
-    labels:
+  name: konakart-web
+  labels:
+    app: konakart
+    tier: web
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
         app: konakart
         tier: web
-spec:
-    replicas: 1
+    spec:
+      containers:
+        - image: braydenneale/konakart:1.0.0
+          name: konakart-web
+          env:
+            - name: DB_TYPE
+              value: mysql
 
-    template:
-        metadata:
-            labels:
-                app: konakart
-                tier: web
-        spec:
-            containers:
-                - image: braydenneale/konakart:1.0.0
-                name: konakart_web
-                env:
-                    - name: DB_TYPE
-                    value: mysql
+            - name: DB_DRIVER
+              value: com.mysql.jdbc.Driver
 
-                    - name: DB_DRIVER
-                    value: com.mysql.jdbc.Driver
+            - name: DB_HOST
+              value: 127.0.0.1
 
-                    - name: DB_HOST
-                    value: 127.0.0.1
+            - name: DB_PORT
+              value: 3306
 
-                    - name: DB_PORT
-                    value: 3306
+            - name: DB_NAME
+              value: konakart
 
-                    - name: DB_NAME
-                    value: konakart
+            - name: DB_OPTIONS
+              value: "zeroDateTimeBehavior=convertToNull&useSSL=false"
 
-                    - name: DB_OPTIONS
-                    value: "zeroDateTimeBehavior=convertToNull&useSSL=false"
-                    
-                    - name: DB_USER
-                    valueFrom: 
-                        secretKeyRef:
-                            name: cloudsql-db-credentials
-                            key: username
-                    
-                    - name: DB_PWD
-                    valueFrom:
-                        secretKeyRef:
-                            name: cloudsql-db-credentials
-                            key: password
-                ports:
-                    - containerPort: 8780
+            - name: DB_USER
+              valueFrom: 
+                secretKeyRef:
+                  name: cloudsql-db-credentials
+                  key: username
 
-                # Gcloud SQL proxy container
-                - image: gcr.io/cloudsql-docker/gce-proxy:1.09
-                name: cloudsql-proxy
-                command: ["cloud_sql_proxy", "--dir=/cloudsql",
+            - name: DB_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: cloudsql-db-credentials
+                  key: password
+          ports:
+            - containerPort: 8780
+              name: konakart
+          # ***
+          # *** Gcloud SQL proxy container *** 
+          # ***
+        - image: gcr.io/cloudsql-docker/gce-proxy:1.09
+          name: cloudsql-proxy
+          command: ["/cloud_sql_proxy", "--dir=/cloudsql",
                     "-instances=konakart:us-central1:konakart-db=tcp:3306",
                     "-credential_file=/secrets/cloudsql/credentials.json"]
-                volumeMounts:
-                    - name: cloudsql-instance-credentials
-                    mountPath: /secrets/cloudsql
-                    readOnly: true
-                    - name: ssl-certs
-                    mountPath: /etc/ssl/certs
-                    - name: cloudsql
-                    mountPath: /cloudsql
-            volumes:
-                - name: cloudsql-instance-credentials
-                secret:
-                      secretName: cloudsql-instance-credentials
-                - name: ssl-certs 
-                hostPath:
-                      path: /etc/ssl/certs
-                - name: cloudsql
-                emptyDir:
+          volumeMounts:
+            - name: cloudsql-instance-credentials
+              mountPath: /secrets/cloudsql
+              readOnly: true
+            - name: ssl-certs
+              mountPath: /etc/ssl/certs
+            - name: cloudsql
+              mountPath: /cloudsql
+      volumes:
+        - name: cloudsql-instance-credentials
+          secret:
+            secretName: cloudsql-instance-credentials
+        - name: ssl-certs 
+          hostPath:
+            path: /etc/ssl/certs
+        - name: cloudsql
+          emptyDir:
 ---
 apiVersion: v1
 kind: Service
 metadata:
-    name: konakart_web
-    labels:
-        app: konakart
-        tier: web
+  name: konakart-web
+  labels:
+    app: konakart
+    tier: web
 spec:
-    ports:
-        - port: 8780
-          targetPort: 8780
-    selector:
-        app: konakart
-        tier: web
+  ports:
+    - port: 8780
+      targetPort: 8780
+  selector:
+    app: konakart
+    tier: web
