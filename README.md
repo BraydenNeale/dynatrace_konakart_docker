@@ -11,11 +11,15 @@ Repo designed to automate deploying + scaling a dockerized konakart application 
 * Create a DB service account, set environment keys, .yml config for DB connection [how?](https://cloud.google.com/sql/docs/mysql/connect-container-engine) 
 * Create the deployment to launch the defined pods `kubectl create -f konakart_app.yml`
 * Create a service to connect externally to the cluster `kubectl expose deployment konakart-web --type=LoadBalancer`
+* Connect to your external IP address and port show via `kubectl get services`
 * Scale up or down: `kubectl scale deployment konakart-web --replicas x`
 
 ### Dynatrace oneagent monitoring
 * Replace all 'REPLACE\_WITH' strings in dynatrace-oneagent.yaml with your DT credentials - [dynatrace oneagent kubernetes](https://help.dynatrace.com/infrastructure-monitoring/containers/how-do-i-run-oneagent-with-kubernetes/)<br>
 [What are my credentials?](https://help.dynatrace.com/infrastructure-monitoring/containers/how-do-i-deploy-dynatrace-as-docker-container/#locate-your-dynatrace-environment-credentials)
+* Restart (delete and recreate) your deployment and service<br>
+`kubectl delete deployment konakart-web`
+`kubectl delete service konakart-web`
 
 ##### useful commands to verify things...
 * `kubectl get deployments`
