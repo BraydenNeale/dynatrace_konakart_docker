@@ -74,18 +74,3 @@ spec:
             path: /etc/ssl/certs
         - name: cloudsql
           emptyDir:
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: konakart-web
-  labels:
-    app: konakart
-    tier: web
-spec:
-  ports:
-    - port: 8780
-      targetPort: 8780
-  selector:
-    app: konakart
-    tier: web
