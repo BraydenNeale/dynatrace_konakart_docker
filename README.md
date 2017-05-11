@@ -7,7 +7,7 @@ Repo designed to automate deploying + scaling a dockerized konakart application 
 ## Installation
 Download konakart installer<br>
 `curl -SL http://www.konakart.com/kkcounter/click.php?id=5 -o ./app/konakart-installation`<br>
-`chmod +x /app/konakart-installation`
+`chmod +x app/konakart-installation`
 
 Launch Dynatrace Server, collector and agent<br>
 `cd Dynatrace_Docker`<br>
