@@ -6,7 +6,7 @@ if [ ! -f /usr/local/konakart ]; then
             -DDatabaseUrl jdbc:"$DB_TYPE"://"$DB_HOST":"$DB_PORT"/"$DB_NAME"?"$DB_OPTIONS" \
             -DDatabaseUsername "$DB_USER" \
             -DDatabasePassword "$DB_PWD"  \
-            -DLoadDB 1
+            -DLoadDB "$DB_LOAD"
 
 	sleep 10s	
 	echo "...... Finished installing."
