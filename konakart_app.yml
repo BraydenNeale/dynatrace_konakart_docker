@@ -33,7 +33,7 @@ spec:
               value: konakart
 
             - name: DB_LOAD
-              value: "1"
+              value: "0"
 
             - name: DB_OPTIONS
               value: "zeroDateTimeBehavior=convertToNull&useSSL=false"
