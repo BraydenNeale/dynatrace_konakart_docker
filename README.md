@@ -1,37 +1,24 @@
-# Konakart + Docker + Dynatrace Appmon
-Repo designed to automate deploying + scaling a dockerized konakart application instrumented with Dynatrace Appmon.
+# Konakart + Docker + Dynatrace
+Repo designed to automate deploying + scaling a dockerized konakart application using kubernetes and monitored by Dynatrace.
 
 [Konakart](https://www.konakart.com)<br>
-[Dynatrace Docker components](https://github.com/Dynatrace/Dynatrace-Docker)<br>
 
 ## Installation
-Download konakart installer<br>
-`curl -SL http://www.konakart.com/kkcounter/click.php?id=5 -o ./app/konakart-installation`<br>
-`chmod +x /app/konakart-installation`
+### For building and deploying the docker image refer to one of the docker branches [or just pull my image](https://hub.docker.com/r/braydenneale/konakart/)
+### Google cloud - with cloud SQL
+* Create a new project on Google cloud and a GKE cluster for it: [how?](https://deis.com/blog/2016/first-kubernetes-cluster-gke/)
+* Create a new SQL instance [how?](https://cloud.google.com/sql/docs/mysql/create-instance) 
+* Create a DB service account, set environment keys, .yml config for DB connection [how?](https://cloud.google.com/sql/docs/mysql/connect-container-engine) 
+* Create the deployment to launch the defined pods `kubectl create -f konakart_app.yml`
+* Create a service to connect externally to the cluster `kubectl expose deployment konakart-web --type=LoadBalancer`
+* Scale up or down: `kubectl scale deployment konakart-web --replicas x`
 
-Launch Dynatrace Server, collector and agent<br>
-`cd Dynatrace_Docker`<br>
-`docker-compose up -d`
-
-Configure system profile through client:<br>
-    Note: agent name is currently hardcoded in startkonakart.sh so set the agent mapping to tomcat_Konakart (or update this).<br>
-    TODO: Environment variable for this... or catalina.sh run<br> 
-
-Launch Konakart: app servers, db, load balancer<br>
-`cd ..`<br>
-`docker-compose scale konakart_app=4` (only have 4 Tcp ports set - LB needs to know about all of them)<br>
-`docker-compose up -d`
-
-Scale app server (load balancer auto-adapts)<br>
-`docker-compose scale konakart_app=x` (where 1 <= x <= 4)
+##### useful commands to verify things...
+* `kubectl get deployments`
+* `kubectl get secrets`
+* `kubectl get services`
+* `kubectl describe pod [PODNAME]`
 
 ### System dependencies
-* docker
-* docker-compose
-* curl
 
 ### Known issues
-The mysql image used for this (beantoast... from lab document) has an issue where the DB and Konakart_App don't quite align (old version).<br>
-TODO: Setup a new DB through base mysql image<br>
-
-The legacy load balancer setup is not ideal... can only scale up to 4 app servers and have to specify different containers for them. The branch compose2 LB solves this via compose mode... but cannot connect to that collector via my network config attemps.
