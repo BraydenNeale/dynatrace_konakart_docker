@@ -14,7 +14,7 @@ spec:
         tier: web
     spec:
       containers:
-        - image: braydenneale/konakart:1.0.0
+        - image: braydenneale/konakart:1.1.0
           name: konakart-web
           env:
             - name: DB_TYPE
@@ -31,6 +31,9 @@ spec:
 
             - name: DB_NAME
               value: konakart
+
+            - name: DB_LOAD
+              value: "0"
 
             - name: DB_OPTIONS
               value: "zeroDateTimeBehavior=convertToNull&useSSL=false"
