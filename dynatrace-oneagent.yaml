@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: dynatrace-oneagent
+spec:
+  template:
+    metadata:
+      labels:
+        run: dynatrace-oneagent
+    spec:
+      hostPID: true
+      hostIPC: true
+      hostNetwork: true
+      volumes:
+      - name: host-root
+        hostPath:
+          path: /
+      containers:
+      - name: dynatrace-oneagent
+        image: dynatrace/oneagent
+        args:
+        - "TENANT=REPLACE_WITH_YOUR_ENVIRONMENT_ID"
+        - "TENANT_TOKEN=REPLACE_WITH_YOUR_TOKEN"
+        - "SERVER=REPLACE_WITH_YOUR_CONNECTION_ENDPOINT"
+        volumeMounts:
+        - mountPath: /mnt/root
+          name: host-root
+        securityContext:
+          privileged: true
