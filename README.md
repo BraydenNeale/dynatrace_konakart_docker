@@ -1,37 +1,47 @@
-# Konakart + Docker + Dynatrace Appmon
-Repo designed to automate deploying + scaling a dockerized konakart application instrumented with Dynatrace Appmon.
+# Konakart + Docker
+Repo designed to automate building of a configurable konakart docker-image and running it through docker compose
 
 [Konakart](https://www.konakart.com)<br>
-[Dynatrace Docker components](https://github.com/Dynatrace/Dynatrace-Docker)<br>
 
 ## Installation
-Download konakart installer<br>
+* Download konakart installer<br>
 `curl -SL http://www.konakart.com/kkcounter/click.php?id=5 -o ./app/konakart-installation`<br>
 `chmod +x app/konakart-installation`
-
-Launch Dynatrace Server, collector and agent<br>
-`cd Dynatrace_Docker`<br>
+* Run and build/pull Konakart images: konakart-app, mysql, HA proxy<br>
+Replace example env vars in *./app* (*konakart.env*, *mysql.env*) with your own<br>
 `docker-compose up -d`
+* Scale app server (load balancer auto-adapts)<br>
+`docker-compose scale konakart_app=x`
 
-Configure system profile through client:<br>
-    Note: agent name is currently hardcoded in startkonakart.sh so set the agent mapping to tomcat_Konakart (or update this).<br>
-    TODO: Environment variable for this... or catalina.sh run<br> 
+* Alternatively... just to build the konakart image<br>
+`docker build -t [image_name] ./app/`
 
-Launch Konakart: app servers, db, load balancer<br>
-`cd ..`<br>
-`docker-compose scale konakart_app=4` (only have 4 Tcp ports set - LB needs to know about all of them)<br>
-`docker-compose up -d`
+* Tag your image<br>
+`docker tag [image_name] [repo + tag + version]`<br>
+e.g. `docker tag konakart_app braydenneale/konakart:1.0.0`
+* Create repo for image ... e.g. on dockerhub
+* Push to a remote repo<br>
+`docker login`<br>
+`docker push [image_tag]`<br>
+e.g. `docker push braydenneale/konakart:1.0.0`
 
-Scale app server (load balancer auto-adapts)<br>
-`docker-compose scale konakart_app=x` (where 1 <= x <= 4)
+### Environment Variables 
+#### konakart.env
+* **DB_TYPE**: e.g mysql
+* **DB_DRIVER**: db driver for connection e.g. com.mysql.jdbc.Driver
+* **DB_HOST**: ip or host name to connect to
+* **DB_PORT**: port to connect to
+* **DB_NAME**: konakart requires an existing DB to connect to... must be created beforehand (should = MYSQL_DATABASE)
+* **DB_LOAD**: Boolean value for auto seeding the DB with test data (manual seeding beforehand is better -> as load has issues with scaling)
+* **DB_OPTIONS**: Additional connection options - refer to konakart docs e.g. useSSL
+* **DB_USER**: user account to use to connect to the DB
+* **DB_PWD**: password for db user account (should = MYSQL_ROOT_PASSWORD, if using the root user)
+
+#### mysql.env - [image overview](https://hub.docker.com/_/mysql/)
+* **MYSQL_ROOT_PASSWORD**: root password to set for the DB
+* **MYSQL_DATABASE**: Database to create on container startup 
 
 ### System dependencies
 * docker
 * docker-compose
 * curl
-
-### Known issues
-The mysql image used for this (beantoast... from lab document) has an issue where the DB and Konakart_App don't quite align (old version).<br>
-TODO: Setup a new DB through base mysql image<br>
-
-The legacy load balancer setup is not ideal... can only scale up to 4 app servers and have to specify different containers for them. The branch compose2 LB solves this via compose mode... but cannot connect to that collector via my network config attemps.
