@@ -1,4 +1,4 @@
-# Konakart + Docker + Dynatrace
+# Konakart + Kubernetes + Dynatrace
 Repo designed to automate deploying + scaling a dockerized konakart application using kubernetes and monitored by Dynatrace.
 
 [Konakart](https://www.konakart.com)<br>
@@ -48,7 +48,3 @@ Each of these pods has 2 containers: 1 - the konakart web server, 2 - the gcloud
 * **DB_PWD**: password for db user account (store within kubernetes secrets)
 
 TODO: Env vars for DT oneagent connection tokens
-
-### System dependencies
-
-### Known issues
