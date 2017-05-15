@@ -7,7 +7,9 @@ Repo designed to automate deploying + scaling a dockerized konakart application 
 ### For building and deploying the docker image refer to the [dockerbuild](https://github.com/BraydenNeale/dynatrace_konakart_docker/tree/dockerbuild) branch<br> 
 [...or just pull my image](https://hub.docker.com/r/braydenneale/konakart/)
 ### Konakart on Google cloud - with cloud SQL
-* Create a new project on Google cloud and a GKE cluster for it: [how?](https://deis.com/blog/2016/first-kubernetes-cluster-gke/)
+* Create a new project on Google cloud and a GKE cluster for it: [how?](https://deis.com/blog/2016/first-kubernetes-cluster-gke/)<br>
+*Note: Gcloud container creation provides 2 node image types, cos and container-vm. Due to the security features of the cos image the Dynatrace oneagent is not 
+able to gain root access and therefore cannot instrument the cluster (until supported). For this lab you need to select the* **container-vm** *node image*<br>
 * Create a new SQL instance [how?](https://cloud.google.com/sql/docs/mysql/create-instance) 
 * Create a DB service account, set environment keys, .yml config for DB connection [how?](https://cloud.google.com/sql/docs/mysql/connect-container-engine) 
 * Create the deployment to launch the defined pods `kubectl create -f konakart_app.yml`
